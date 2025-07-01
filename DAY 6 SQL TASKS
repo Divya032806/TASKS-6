@@ -1,0 +1,52 @@
+--sub queries
+
+Already I have created two tables so using same tables employees and department
+select * from employees;
+select * from department;
+
+
+-- Scalar subquery
+ 
+SELECT emp_name
+FROM employees
+WHERE emp_salary > (SELECT AVG(emp_salary) FROM employees);
+
+-- Column Subquery
+
+SELECT emp_name
+FROM employees
+WHERE EMP_ID IN (SELECT ID FROM department WHERE dept_name = 'IT');
+
+-- Table subquery
+
+
+SELECT emp_id, emp_name,
+FROM employees
+WHERE emp_id IN (SELECT ID FROM department);
+
+
+-- Non correlated subquery 
+
+SELECT emp_name
+FROM employees
+WHERE emp_salary > (SELECT AVG(emp_salary) FROM employees);
+
+
+--Correlated subquery
+
+SELECT emp_name
+FROM employees e1
+WHERE emp_salary > (SELECT AVG(emp_salary) FROM employees e2 WHERE e1.emp_dept = e2.emp_dept);
+
+select emp_name, emp_dept
+from employees e
+where emp_dept in (
+    select dept_name
+    from department d
+    where exists (
+        select 1
+        from employees e2
+        where e2.emp_dept = d.dept_name
+        and e2.emp_salary > 50000
+    )
+);
